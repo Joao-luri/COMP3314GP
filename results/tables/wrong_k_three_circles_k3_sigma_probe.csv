@@ -1,0 +1,7 @@
+ratio_r,sigma,status,ARI_vs_3ring_truth,merge_or_composition
+0.7,0.06553855170704842,ok,0.8987649685000081,"{""pred_0"": {""inner"": 0, ""middle"": 150, ""outer"": 16}, ""pred_1"": {""inner"": 0, ""middle"": 0, ""outer"": 134}, ""pred_2"": {""inner"": 150, ""middle"": 0, ""outer"": 0}}"
+1.0,0.0936265024386406,ok,0.5218336454992858,"{""pred_0"": {""inner"": 150, ""middle"": 0, ""outer"": 0}, ""pred_1"": {""inner"": 0, ""middle"": 31, ""outer"": 41}, ""pred_2"": {""inner"": 0, ""middle"": 119, ""outer"": 109}}"
+1.4,0.13107710341409684,ok,0.2938863556733396,"{""pred_0"": {""inner"": 0, ""middle"": 50, ""outer"": 52}, ""pred_1"": {""inner"": 0, ""middle"": 62, ""outer"": 69}, ""pred_2"": {""inner"": 150, ""middle"": 38, ""outer"": 29}}"
+2.0,0.1872530048772812,ok,0.03849143434637192,"{""pred_0"": {""inner"": 25, ""middle"": 56, ""outer"": 64}, ""pred_1"": {""inner"": 75, ""middle"": 41, ""outer"": 31}, ""pred_2"": {""inner"": 50, ""middle"": 53, ""outer"": 55}}"
+2.8,0.2621542068281937,ok,0.022875186233691055,"{""pred_0"": {""inner"": 33, ""middle"": 56, ""outer"": 58}, ""pred_1"": {""inner"": 45, ""middle"": 55, ""outer"": 55}, ""pred_2"": {""inner"": 72, ""middle"": 39, ""outer"": 37}}"
+4.0,0.3745060097545624,ok,0.004765312992980073,"{""pred_0"": {""inner"": 70, ""middle"": 47, ""outer"": 57}, ""pred_1"": {""inner"": 42, ""middle"": 50, ""outer"": 48}, ""pred_2"": {""inner"": 38, ""middle"": 53, ""outer"": 45}}"

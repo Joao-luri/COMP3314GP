@@ -1,0 +1,4 @@
+merge,ARI_njw_k2,ARI_kmeans_k2
+merge inner+middle vs outer,0.09839357429718876,-0.002216189213702152
+merge inner+outer vs middle,0.09839357429718876,-0.002216189213702152
+merge middle+outer vs inner,1.0,-0.0010282835746823356

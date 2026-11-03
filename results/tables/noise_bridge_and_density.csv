@@ -1,0 +1,9 @@
+experiment,setting,n,n_bridge,sigma,k,ARI_njw,ARI_kmeans,ARI_connected_components,cc_n_components,cc_threshold,eigengap,data_seed,kmeans_seed,spec
+moons_bridge,clean,400,0,0.08377482859718326,2,1.0,0.27380610269142164,1.0,2,0.306485,0.003562707131769871,0,0,"{""n_samples"": 400, ""noise"": 0.05, ""n_bridge_thin"": 25, ""n_bridge_strong"": 80, ""bridge_noise"": 0.02}"
+moons_bridge,thin_bridge,425,25,0.08350696670267599,2,1.0,0.25824114114544194,0.0,2,0.109068,0.0027389637932612176,0,0,"{""n_samples"": 400, ""noise"": 0.05, ""n_bridge_thin"": 25, ""n_bridge_strong"": 80, ""bridge_noise"": 0.02, ""n_bridge"": 25}"
+moons_bridge,strong_bridge,480,80,0.07842673511856951,2,1.0,0.2431304074503791,0.0,2,0.105792,0.0010833503393814503,0,0,"{""n_samples"": 400, ""noise"": 0.05, ""n_bridge_thin"": 25, ""n_bridge_strong"": 80, ""bridge_noise"": 0.02, ""n_bridge"": 80}"
+moons_bridge,gap_noise_cloud,520,120,0.08488142445727756,2,1.0,0.23819242619803122,0.0,2,0.474871,0.0010074617429164379,0,0,"{""n_samples"": 400, ""noise"": 0.05, ""n_bridge_thin"": 25, ""n_bridge_strong"": 80, ""bridge_noise"": 0.02, ""n_noise"": 120}"
+blobs_bridge,clean,400,0,0.13925367322392737,2,1.0,1.0,1.0,2,1.690064,0.10517597954536084,0,0,"{""n_per_blob"": 200, ""bridge"": false}"
+blobs_bridge,dense_corridor,550,150,0.1495780536459335,2,1.0,1.0,0.0,2,0.407132,0.006384941380339182,0,0,"{""n_per_blob"": 200, ""n_bridge"": 150, ""bridge_noise"": 0.25}"
+density_imbalance,row_normalize=True,400,0,0.13825075848260063,2,1.0,1.0,,,,0.015382158297345905,0,0,"{""centers"": [[-3.0, 0.0], [3.0, 0.0]], ""n_samples"": [350, 50], ""cluster_std"": [0.45, 0.45]}"
+density_imbalance,row_normalize=False,400,0,0.13825075848260063,2,0.9555833113061138,1.0,,,,0.015382158297345905,0,0,"{""centers"": [[-3.0, 0.0], [3.0, 0.0]], ""n_samples"": [350, 50], ""cluster_std"": [0.45, 0.45]}"

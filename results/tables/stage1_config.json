@@ -1,0 +1,51 @@
+{
+  "datasets": {
+    "circles": {
+      "generator": "make_circles",
+      "n_samples": 400,
+      "noise": 0.05,
+      "factor": 0.5
+    },
+    "moons": {
+      "generator": "make_moons",
+      "n_samples": 400,
+      "noise": 0.05
+    },
+    "blobs": {
+      "generator": "make_blobs",
+      "n_samples": 450,
+      "centers": [
+        [
+          -5.0,
+          0.0
+        ],
+        [
+          0.0,
+          5.0
+        ],
+        [
+          5.0,
+          0.0
+        ]
+      ],
+      "cluster_std": 1.0
+    }
+  },
+  "data_seed": 0,
+  "kmeans": {
+    "init": "k-means++",
+    "n_init": 10,
+    "max_iter": 300,
+    "random_state": 0
+  },
+  "sigma_rule": "median distance to 7-th nearest neighbour",
+  "scaling": "none (raw generator coordinates for both methods)",
+  "row_normalize": true,
+  "versions": {
+    "python": "3.14.3",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "matplotlib": "3.11.2"
+  }
+}
