@@ -1,5 +1,7 @@
 # NJW Spectral Clustering — COMP3314 Group Project
 
+**中文详细说明（目录、每个文件做什么）：[README_zh.md](README_zh.md)**
+
 A small, from-scratch implementation and experimental study of
 
 > Andrew Y. Ng, Michael I. Jordan, Yair Weiss.
