@@ -41,30 +41,48 @@ def make_twocircles(seed: int = 0) -> tuple[np.ndarray, np.ndarray, int, dict]:
 
 
 def make_threecircles_joined(seed: int = 0) -> tuple[np.ndarray, np.ndarray, int, dict]:
-    """Three rings plus short radial bridges (Figure 1f/1g/1j setting, our data).
+    """Three rings plus a short radial bridge in each gap (Figure 1f/1g/1j, our data).
 
-    Bridge points are labeled -1 and should be ignored when scoring ARI.
-    True ring count is 3; the paper also shows a k=2 run on this kind of data.
+    Point count scales with the circumference, so every ring has the same
+    along-arc spacing. An equal count per ring leaves the outer ring too sparse:
+    the sigma chosen by minimum Y-distortion then splits that ring and glues the
+    inner two together through the bridge.
+
+    Each bridge is a few points, with a step larger than the along-ring spacing,
+    so it is visible but weaker than the links inside a ring. Bridge points are
+    labeled -1 and should be ignored when scoring ARI. True ring count is 3;
+    the paper also shows a k=2 run on this kind of data.
     """
     rng = np.random.default_rng(seed)
-    radii = (0.45, 0.95, 1.45)
-    n_per = 120
-    points, labels = [], []
+    radii = (0.55, 1.15, 1.75)
+    spacing = 0.05
+    noise = 0.015
+    n_bridge = 8
+    # Fraction of each gap left empty at both ends, so the bridge does not
+    # sit on top of the rings.
+    bridge_margin = 0.04
+    points, labels, n_per = [], [], []
     for lab, radius in enumerate(radii):
-        theta = rng.uniform(0.0, 2.0 * np.pi, size=n_per)
+        n = int(round(2.0 * np.pi * radius / spacing))
+        step = 2.0 * np.pi / n
+        theta = (np.arange(n) + 0.5) * step
+        theta = theta + rng.uniform(-0.15, 0.15, size=n) * step
+        theta = theta + rng.uniform(0.0, step)
         pts = np.column_stack([radius * np.cos(theta), radius * np.sin(theta)])
-        pts += rng.normal(0.0, 0.02, size=pts.shape)
+        pts += rng.normal(0.0, noise, size=pts.shape)
         points.append(pts)
-        labels.append(np.full(n_per, lab, dtype=int))
-    # Two short bridges so neighbouring rings are joined, as in the figure name.
+        labels.append(np.full(n, lab, dtype=int))
+        n_per.append(n)
     for r0, r1 in ((radii[0], radii[1]), (radii[1], radii[2])):
-        t = np.linspace(0.15, 0.85, 10)
-        bridge = np.column_stack([((1 - t) * r0 + t * r1), np.zeros_like(t)])
-        bridge += rng.normal(0.0, 0.01, size=bridge.shape)
+        gap = r1 - r0
+        t = np.linspace(r0 + bridge_margin * gap, r1 - bridge_margin * gap, n_bridge)
+        bridge = np.column_stack([t, np.zeros_like(t)])
+        bridge += rng.normal(0.0, 0.008, size=bridge.shape)
         points.append(bridge)
-        labels.append(np.full(len(t), -1, dtype=int))
-    spec = {"name": "threecircles_joined", "radii": radii, "n_per_ring": n_per,
-            "n_bridge_per_gap": 10, "seed": seed, "note": PAPER_LIKE_NOTE}
+        labels.append(np.full(n_bridge, -1, dtype=int))
+    spec = {"name": "threecircles_joined", "radii": radii, "spacing": spacing,
+            "n_per_ring": n_per, "n_bridge_per_gap": n_bridge, "bridge_margin": bridge_margin,
+            "seed": seed, "note": PAPER_LIKE_NOTE}
     return np.vstack(points), np.concatenate(labels), 3, spec
 
 
