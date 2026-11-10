@@ -495,6 +495,33 @@ def wrong_k_png() -> tuple[Path, dict]:
     return _save(fig, "wrong_k"), nums
 
 
+def k_page_png() -> tuple[Path, dict]:
+    """Three panels for the k slide: truth, k=2, k=3, all at the default sigma."""
+    P, y, _ = make_three_circles(0)
+    s0 = sigma_knn_median(P)
+    merged = np.where(y == 0, 0, 1)
+    runs = []
+    for k in (2, 3):
+        res = njw_spectral_clustering(P, k, s0)
+        a3 = adjusted_rand_score(y, res.labels)
+        ref = merged if k == 2 else y
+        runs.append((k, match_labels(ref, res.labels), a3, adjusted_rand_score(merged, res.labels)))
+    nums = {"sigma0": s0, (2, 1.0): runs[0][2], (3, 1.0): runs[1][2], "k2_vs_merge": runs[0][3],
+            (3, 0.7): adjusted_rand_score(y, njw_spectral_clustering(P, 3, 0.7 * s0).labels)}
+    fig, axes = plt.subplots(1, 3, figsize=(11.4, 3.7))
+    panels = [(y, "3 rings (truth)", "")]
+    panels.append((runs[0][1], r"NJW, $k = 2$, $\sigma_0$",
+                   f"ARI vs 3 rings = {runs[0][2]:.2f}\nARI vs inner | rest = {runs[0][3]:.2f}"))
+    panels.append((runs[1][1], r"NJW, $k = 3$, $\sigma_0$", f"ARI vs 3 rings = {runs[1][2]:.2f}"))
+    for ax, (lab, title, sub) in zip(axes, panels):
+        for c in np.unique(lab):
+            ax.scatter(P[lab == c, 0], P[lab == c, 1], s=8, color=CLUSTER_COLORS[int(c) % len(CLUSTER_COLORS)])
+        scatter_axes(ax, 1.15)
+        ax.set_title(title + ("\n" + sub if sub else "\n"), fontsize=13, va="bottom")
+    fig.tight_layout(rect=(0, 0.02, 1, 1))
+    return _save(fig, "k_page"), nums
+
+
 def bridge_png() -> tuple[Path, dict]:
     P, y_eval, is_bridge, k = make_moons_with_bridge(0, n_bridge=BRIDGE_MOONS_SPEC["n_bridge_strong"])
     s0 = sigma_knn_median(P)
