@@ -1,0 +1,32 @@
+{
+  "dataset": {
+    "generator": "make_circles",
+    "noise": 0.05,
+    "factor": 0.5,
+    "data_seed": 0
+  },
+  "k": 2,
+  "sigma_rule": "median distance to 7-th nearest neighbour",
+  "kmeans": "k-means++, n_init=10, random_state=0",
+  "eigensolver": "scipy.linalg.eigh(subset_by_index=top k+1)",
+  "fit_min_n": 1000,
+  "loglog_slopes": {
+    "sigma": 0.9319750039156015,
+    "affinity": 2.581266173196485,
+    "normalize": 2.642348095800531,
+    "eigh_topk": 3.461633643530473,
+    "kmeans": 1.3660988103096279,
+    "eigh_full": 2.8625134876344016,
+    "memory": 1.926190851219249
+  },
+  "environment": {
+    "python": "3.14.3",
+    "machine": "arm64",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "cpu_count": 10,
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1",
+    "blas": []
+  }
+}

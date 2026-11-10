@@ -23,10 +23,12 @@
 
 Meila–Shi（\(P=D^{-1}A\)，不做行归一化）和连通分量已在 `scripts/run_paper_like.py` 里作为 baseline。Kannan 只做了原文那句话对应的简化版，见 `docs/paper_like_experiments_zh.md`。原文 Figure 1 的点集没有公布，该脚本用的是我们按图意重建的数据。
 
-## 4. 适量重复
+## 4. 适量重复、90° 初始化、规模 — 已完成
 
-- 例如 10 个 data seed × 固定 K-means seed，以及固定 data seed × 10 个 K-means seed，分开报告，说明变化来源。
-- 汇报 ARI 均值和标准差。
+见 `docs/limitations_experiments_zh.md`（`run_multi_seed.py`、`run_kmeans_init.py`、`run_scaling.py`）。  
+10 个 data seed × 固定 K-means seed 与固定 data seed × 10 个 K-means seed 分开报告；均值、标准差、最小/最大都在 `multi_seed_summary.csv`。
+
+仍可选：稀疏 kNN 图 + `eigsh` 的规模对照；改变噪声水平/点数而不只是 data seed。
 
 ## 5. Report 与 slides
 

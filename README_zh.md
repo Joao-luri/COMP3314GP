@@ -127,6 +127,9 @@ COMP3314GP/
 | `run_wrong_k_three_circles.py` | 三环上 \(k=2\) vs \(k=3\) | `wrong_k_three_circles*` |
 | `run_noise_bridge.py` | 噪声桥 / 缝隙噪声 / 行归一化 ablation | `noise_bridge_*`、`density_imbalance_*` |
 | `run_paper_like.py` | Figure-1 风格自建数据 + 多 baseline | `paper_like_*` |
+| `run_scaling.py` | 各步耗时与峰值内存随 \(n\) 的增长 | `scaling_*` |
+| `run_kmeans_init.py` | 原文脚注 3 的 90° 初始化 vs k-means++ / 随机 | `kmeans_init_*` |
+| `run_multi_seed.py` | 幻灯片上的关键数字在 10 个 data seed / 10 个 K-means seed 上重复 | `multi_seed_*` |
 
 常用命令：
 
@@ -163,7 +166,8 @@ python scripts/run_paper_like.py
 | `wrong_k_three_circles_zh.md` | 给错 \(k\) 时「合理但错误」的合并 |
 | `noise_bridge_zh.md` | 噪声桥打垮连通分量、NJW 仍稳；行归一化小幅帮助 |
 | `paper_like_experiments_zh.md` | Figure-1 风格尝试：数据对应、σ 搜索、baseline 定义、ARI 表 |
-| `next_stages_zh.md` | 已完成 / 仍可选的后续（多种子、报告与 slides） |
+| `limitations_experiments_zh.md` | 规模（内存/特征分解）、90° 初始化、多种子三组补充实验 |
+| `next_stages_zh.md` | 已完成 / 仍可选的后续（报告与 slides） |
 
 ---
 
@@ -249,14 +253,15 @@ pip install -r requirements.txt
 - **不做特征缩放**：K-means 与 NJW 看到同一套原始坐标、同一个 \(k\)。  
 - **σ（stage1 默认）**：第 7 近邻距离中位数；**不是**原文「在网格上最小化 Y 的 K-means distortion」。paper-like 脚本才按 distortion 搜 σ。  
 - **真值标签**：只用于设定 \(k\)、算 ARI/NMI、画图着色；**不用于**选默认 σ。  
-- **K-means**：`k-means++`，`n_init=10`，`random_state=0`；原文脚注 3 的 90° 初始化未实现。  
-- **规模**：稠密 \(O(n^2)\) 相似度 + 全特征分解，适合几千点量级的玩具实验。
+- **K-means**：`k-means++`，`n_init=10`，`random_state=0`；原文脚注 3 的 90° 初始化已实现为可选项 `KMeansConfig(init="orthogonal")`，默认不用（对比见 `docs/limitations_experiments_zh.md`）。  
+- **规模**：稠密 \(O(n^2)\) 相似度 + 稠密特征分解，适合几千点量级的玩具实验（实测上限见 `run_scaling.py`）。
 
 ---
 
 ## 10. 当前局限（批判分析可写）
 
-- 多数实验仍是单 data seed / 单 K-means seed，尚无系统方差估计。  
+- 规模：峰值内存约 3.8 个 \(n\times n\) 稠密矩阵，16 GB 约在 2.4 万点耗尽；特征分解占 94% 时间、约 \(n^3\)。  
+- 单种子数字中，噪声桥 NJW 1.00 和"0.7σ₀ 修好三环"偏乐观（10 个 data seed 中分别 8/10、5/10 成立）；变化来自数据，不来自 K-means 种子。  
 - 玩具 2D、低噪声；circles/moons 上 eigengap 很小，结果可能脆弱（σ 实验已部分展示）。  
 - \(k\) 必须事先给定；给错会得到另一种「看起来合理」的划分。  
 - Theorem 2 条件在 circles/moons 上可失败，但 NJW 仍完美聚类——理论充分条件 ≠ 实际必要。  

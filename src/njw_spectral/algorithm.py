@@ -23,16 +23,55 @@ DEFAULT_MIN_ROW_NORM = 1e-10
 SYMMETRY_ATOL = 1e-12
 
 
+ORTHOGONAL_INIT = "orthogonal"
+
+
+def orthogonal_init(Y: np.ndarray, k: int, random_state: int = 0) -> np.ndarray:
+    """Paper footnote 3: k initial centres taken from the rows of Y.
+
+    The first centre is a uniformly random row. Each further centre is the row
+    whose largest cosine to the centres chosen so far is smallest, i.e. the row
+    closest to 90 degrees from all of them in the worst case.
+    """
+    Y = np.asarray(Y, dtype=float)
+    n = Y.shape[0]
+    k = _validate_k(k, n)
+    U = Y / np.linalg.norm(Y, axis=1, keepdims=True)
+    rng = np.random.default_rng(random_state)
+    chosen = [int(rng.integers(n))]
+    max_cos = U @ U[chosen[0]]
+    for _ in range(1, k):
+        score = max_cos.copy()
+        score[chosen] = np.inf
+        nxt = int(np.argmin(score))
+        chosen.append(nxt)
+        max_cos = np.maximum(max_cos, U @ U[nxt])
+    return Y[chosen].copy()
+
+
 @dataclass(frozen=True)
 class KMeansConfig:
-    """Settings for every K-means call (baseline and NJW step 5)."""
+    """Settings for every K-means call (baseline and NJW step 5).
+
+    init may be any sklearn init string, or "orthogonal" for the paper's
+    footnote-3 initialization (needs the data in build; always one run).
+    """
 
     init: str = "k-means++"
     n_init: int = 10
     max_iter: int = 300
     random_state: int = 0
 
-    def build(self, k: int) -> KMeans:
+    def build(self, k: int, data: np.ndarray | None = None) -> KMeans:
+        if self.init == ORTHOGONAL_INIT:
+            if data is None:
+                raise ValueError("orthogonal init needs the data to pick rows from")
+            return KMeans(
+                n_clusters=k,
+                init=orthogonal_init(data, k, self.random_state),
+                n_init=1,
+                max_iter=self.max_iter,
+            )
         return KMeans(
             n_clusters=k,
             init=self.init,
@@ -203,7 +242,7 @@ def njw_from_affinity(
         Y, row_norms = X.copy(), np.linalg.norm(X, axis=1)
 
     # Steps 5-6: K-means on the rows of Y; row i's label is point i's label.
-    km = kmeans_config.build(k).fit(Y)
+    km = kmeans_config.build(k, Y).fit(Y)
     return NJWResult(
         labels=km.labels_,
         affinity=np.asarray(A, dtype=float),

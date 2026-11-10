@@ -15,11 +15,13 @@ from sklearn.metrics import adjusted_rand_score
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from njw_spectral import (  # noqa: E402
+    KMeansConfig,
     gaussian_affinity,
     njw_from_affinity,
     njw_spectral_clustering,
     normalize_rows,
     normalized_affinity,
+    orthogonal_init,
     sigma_knn_median,
     top_eigenvectors,
 )
@@ -108,6 +110,24 @@ def test_ideal_block_diagonal_recovers_groups():
     same = y[:, None] == y[None, :]
     assert np.allclose(G[same], 1.0, atol=1e-8)
     assert np.allclose(G[~same], 0.0, atol=1e-8)
+
+
+def test_orthogonal_init_picks_one_row_per_block_in_ideal_case():
+    rng = np.random.default_rng(1)
+    A, y = _block_affinity([30, 50, 40], rng)
+    Y = njw_from_affinity(A, k=3).Y
+    for seed in range(5):
+        centres = orthogonal_init(Y, 3, random_state=seed)
+        rows = [int(np.flatnonzero(np.all(np.isclose(Y, c), axis=1))[0]) for c in centres]
+        assert len(set(y[rows])) == 3
+        assert np.allclose(centres @ centres.T, np.eye(3), atol=1e-8)
+    res = njw_from_affinity(A, k=3, kmeans_config=KMeansConfig(init="orthogonal"))
+    assert adjusted_rand_score(y, res.labels) == 1.0
+
+
+def test_orthogonal_init_requires_data():
+    with pytest.raises(ValueError):
+        KMeansConfig(init="orthogonal").build(2)
 
 
 def test_diagnostics_ideal_case():

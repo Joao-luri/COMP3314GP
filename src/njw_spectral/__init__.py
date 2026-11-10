@@ -6,6 +6,7 @@ from .algorithm import (
     njw_spectral_clustering,
     normalize_rows,
     normalized_affinity,
+    orthogonal_init,
     sigma_knn_median,
     top_eigenvectors,
 )
@@ -18,6 +19,7 @@ __all__ = [
     "njw_spectral_clustering",
     "normalize_rows",
     "normalized_affinity",
+    "orthogonal_init",
     "sigma_knn_median",
     "top_eigenvectors",
 ]
