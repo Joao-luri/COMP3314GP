@@ -273,8 +273,8 @@ pip install -r requirements.txt
 
 ## 11. 组员协作（GitHub）
 
-- 仓库：https://github.com/Joao-luri/COMP3314GP（Private）  
-- 被邀请后：邮件 Accept → `git clone` → 建分支改 → PR 或约定好再 push `main`  
+- 仓库：https://github.com/Joao-luri/COMP3314GP（Public，任何人可读）
+- 要推送需先被加为 collaborator：邮件 Accept → `git clone` → 建分支改 → PR 或约定好再 push `main`
 - 不要提交 `.venv/`、密钥、超大无关文件  
 - 大改算法 / 改默认实验参数前先和组里对齐，避免覆盖彼此已写入报告的数字  
 
